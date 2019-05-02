@@ -1,0 +1,52 @@
+﻿@model ICollection<Participant>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+            </th>
+            <th>
+                Ranking
+            </th>
+            <th>
+                Distance
+                (Meter)
+            </th>
+            <th>
+                Fitness
+                Rating
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 0;
+            string rating = string.Empty;
+            foreach (var participant in Model)
+            {
+                i++;
+                rating = participant.DistanceResult <= 1000 ? "Below Average" :
+                         participant.DistanceResult <= 2000 ? "Average" :
+                         participant.DistanceResult <= 3500 ? "Good" : "Very Good";
+                <tr>
+                    <td>
+                        @i
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => participant.User.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => participant.DistanceResult)
+                    </td>
+                    <td>
+                        @rating
+                    </td>
+                    <td>
+                        <a asp-controller="Participant" asp-action="Edit" asp-route-id="@participant.Id">Edit</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
