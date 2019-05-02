@@ -1,0 +1,44 @@
+﻿@model ICollection<Test>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Participant Count
+            </th>
+            <th>
+                Type
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var test in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => test.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => test.Participants.Count)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => test.Type)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@test.Id">Details</a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

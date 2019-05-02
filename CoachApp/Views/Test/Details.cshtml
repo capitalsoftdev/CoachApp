@@ -1,0 +1,23 @@
+﻿@model Test
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h3 class="text-center">@Model.Type  @Model.Date.ToString("dd/MM/yyyy")</h3>
+
+@{
+    if (Model.Type == TestType.CooperTest)
+    {
+        <partial name="_CooperDetails" model="@Model.Participants.OrderByDescending(p=>p.DistanceResult).ToList()" />
+    }
+    else
+    {
+        <partial name="_SprintDetails" model="@Model.Participants.OrderBy(p=>p.TimeResult).ToList()" />
+    }
+}
+
+<a asp-controller="Participant" asp-action="Create" asp-route-id="@Model.Id">ADD NEW ATHLETE TO TEST</a>
+<br/>
+<a asp-action="Delete" asp-route-id="@Model.Id">DELETE TEST</a>
+<br/>
+<a asp-action="Index">Back to List</a>
