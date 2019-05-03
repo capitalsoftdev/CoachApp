@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using CoachApp.Data;
 using CoachApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoachApp.Controllers
@@ -21,7 +18,11 @@ namespace CoachApp.Controllers
 
         public IActionResult Index()
         {
-            var tests = _context.Tests.Include(t => t.Participants).OrderByDescending(t => t.Date).ToList();
+            var tests = _context.Tests
+                .AsNoTracking()
+                .Include(t => t.Participants)
+                .OrderByDescending(t => t.Date)
+                .ToList();
             return View(tests);
         }
 
@@ -49,6 +50,7 @@ namespace CoachApp.Controllers
         public IActionResult Details(string id)
         {
             var test = _context.Tests
+                .AsNoTracking()
                 .Include(t => t.Participants)
                     .ThenInclude(p => p.User)
                 .FirstOrDefault(t=>t.Id == id);
@@ -64,6 +66,7 @@ namespace CoachApp.Controllers
             }
 
             var test = await _context.Tests
+                .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == id);
             if (test == null)
             {
@@ -86,6 +89,7 @@ namespace CoachApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var test = await _context.Tests
+                .AsNoTracking()
                 .SingleOrDefaultAsync(t => t.Id == id);
             if (test == null)
             {

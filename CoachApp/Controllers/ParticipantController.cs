@@ -26,7 +26,9 @@ namespace CoachApp.Controllers
                 return NotFound();
             }
 
-            var test = _context.Tests.FirstOrDefault(t => t.Id == id);
+            var test = _context.Tests
+                .AsNoTracking()
+                .FirstOrDefault(t => t.Id == id);
             if(test == null)
             {
                 return NotFound();
@@ -66,7 +68,10 @@ namespace CoachApp.Controllers
                 return NotFound();
             }
             ViewBag.Athlets = GetAthlets();
-            var participant = await _context.Set<Participant>().Include(p => p.Test).FirstOrDefaultAsync(p => p.Id == id);
+            var participant = await _context.Set<Participant>()
+                .AsNoTracking()
+                .Include(p => p.Test)
+                .FirstOrDefaultAsync(p => p.Id == id);
             if (participant == null)
             {
                 return NotFound();
@@ -83,7 +88,9 @@ namespace CoachApp.Controllers
                 return NotFound();
             }
             ViewBag.Athlets = GetAthlets();
-            var participantToUpdate = await _context.Set<Participant>().Include(p => p.Test).FirstOrDefaultAsync(p => p.Id == id);
+            var participantToUpdate = await _context.Set<Participant>()
+                .Include(p => p.Test)
+                .FirstOrDefaultAsync(p => p.Id == id);
             if (await TryUpdateModelAsync<Participant>(
                 participantToUpdate,
                 "",
@@ -159,7 +166,8 @@ namespace CoachApp.Controllers
                     join ur in _context.UserRoles on r.Id equals ur.RoleId
                     join u in _context.Users on ur.UserId equals u.Id
                     where (r.Name == "Athlete")
-                    select new SelectListItem(u.FullName, u.Id));
+                    select new SelectListItem(u.FullName, u.Id))
+                    .AsNoTracking();
         }
     }
 }
